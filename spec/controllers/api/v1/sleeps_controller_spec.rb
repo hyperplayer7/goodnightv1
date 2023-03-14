@@ -104,8 +104,12 @@ RSpec.describe Api::V1::SleepsController, type: :controller do
       start3 = Faker::Time.between(from: 1.week.ago, to: DateTime.now)
       create(:sleep_record, user: friend2, start_time: start3, end_time: start3 + 20.hours)
 
-      # create(:sleep_record, user: friend2, start_time: 2.days.ago, end_time: 1.day.ago)
-      # create(:sleep_record, user: friend2, start_time: 1.day.ago, end_time: Time.current)
+      start4 = Faker::Time.between(from: 1.week.ago, to: DateTime.now)
+      create(:sleep_record, user: friend2, start_time: start4, end_time: start4 + rand(1..10).hours)
+
+      start5 = Faker::Time.between(from: 1.week.ago, to: DateTime.now)
+      create(:sleep_record, user: friend2, start_time: start5, end_time: start5 + rand(1..10).hours)
+
       # user.follow(friend1)
       user.send_follow_request_to(friend1) unless user.following?(friend1)
       friend1.accept_follow_request_of(user)
@@ -120,8 +124,8 @@ RSpec.describe Api::V1::SleepsController, type: :controller do
       expect(response).to have_http_status(:success)
       parsed_body = JSON.parse(response.body)
       puts parsed_body.to_s
-      expect(parsed_body.first["start_time"].to_json).to eq(friend2.sleep_records.first.start_time.to_json)
-      # expect(parsed_body.first["end_time"]).to eq(friend2.sleep_records.first.end_time)
+      expect(parsed_body.first['start_time'].to_json).to eq(friend2.sleep_records.first.start_time.to_json)
+      expect(parsed_body.first['end_time'].to_json).to eq(friend2.sleep_records.first.end_time.to_json)
     end
 
     context 'when user is not found' do
